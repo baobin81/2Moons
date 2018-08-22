@@ -65,7 +65,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: game1
+  name: game
   namespace: default
 spec:
   rules:
