@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    qcloud-app: moon
+  name: moon
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      qcloud-app: moon
+  template:
+    metadata:
+      labels:
+        qcloud-app: moon
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: mariadb
+        - name: DB_USER
+          value: 2moons
+        - name: DB_PASSWORD
+          value: 2moons
+        - name: DB_NAME
+          value: 2moons
+        - name: ADMIN_NAME
+          value: admin
+        - name: ADMIN_PASSWORD
+          value: admin
+        - name: ADMIN_MAIL
+          value: admin@tdemo.net
+        image: hub.tencentyun.com/qjk/game@$IMAGE_DIGEST
+        imagePullPolicy: Always
+        name: moon
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+      imagePullSecrets:
+      - name: qcloudregistrykey
+      - name: tencenthubkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    qcloud-app: moon
+  name: moon
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - name: tcp-80-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    qcloud-app: moon
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: game
+  namespace: default
+spec:
+  rules:
+  - host: game.tdemo.net
+    http:
+      paths:
+      - backend:
+          serviceName: moon
+          servicePort: 80
+        path: /
