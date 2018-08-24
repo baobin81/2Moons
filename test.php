@@ -1,3 +1,3 @@
 <?php
-phpinfo();//测试CD
+phpinfo();//测试CD再次测试
 ?>
