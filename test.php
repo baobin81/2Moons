@@ -1,3 +1,3 @@
 <?php
-phpinfo();//输出参数这个参数有问题
+phpinfo();//测试CD
 ?>
